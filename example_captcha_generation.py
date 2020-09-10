@@ -33,55 +33,55 @@ def main():
         Shapes=True
         Noise=False
         captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
-        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+        saveCaptcha(captcha, i, Chars_mode, Shapes, Noise)
 
         Chars_mode="nums"
         Shapes=False
         Noise=True
         captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
-        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+        saveCaptcha(captcha, i, Chars_mode, Shapes, Noise)
 
         Chars_mode="nums"
         Shapes=True
         Noise=True
         captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
-        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+        saveCaptcha(captcha, i, Chars_mode, Shapes, Noise)
 
         Chars_mode="letters"
         Shapes=True
         Noise=False
         captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
-        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+        saveCaptcha(captcha, i, Chars_mode, Shapes, Noise)
 
         Chars_mode="letters"
         Shapes=False
         Noise=True
         captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
-        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+        saveCaptcha(captcha, i, Chars_mode, Shapes, Noise)
 
         Chars_mode="letters"
         Shapes=True
         Noise=True
         captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
-        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+        saveCaptcha(captcha, i, Chars_mode, Shapes, Noise)
 
         Chars_mode="numsletters"
         Shapes=True
         Noise=False
         captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
-        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+        saveCaptcha(captcha, i, Chars_mode, Shapes, Noise)
 
         Chars_mode="numsletters"
         Shapes=False
         Noise=True
         captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
-        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+        saveCaptcha(captcha, i, Chars_mode, Shapes, Noise)
 
         Chars_mode="numsletters"
         Shapes=True
         Noise=True
         captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
-        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+        saveCaptcha(captcha, i, Chars_mode, Shapes, Noise)
 
     print("Process completed. Check captchas images at \"{}\" folder.".format(GEN_CAPTCHAS_FOLDER))
 
@@ -94,11 +94,11 @@ def getFolderName(chars_mode, shapes, noise):
 
     return name
 
-def saveCaptcha(captcha, chars_mode, shapes, noise):
+def saveCaptcha(captcha, captchaNumber, chars_mode, shapes, noise):
     directory = getFolderName(chars_mode, shapes, noise)
     image = captcha["image"]
     characters = captcha["characters"]
-    print("Generated captcha {}: {}".format(directory, characters))
+    print("Generated captcha {}/{} {}: {}".format(captchaNumber + 1, NUMBER_OF_CAPTCHAS_TO_GENERATE, directory, characters))
     if not path.exists(directory):
         makedirs(directory)
     image.save("{}/{}.png".format(directory, characters), "png")
