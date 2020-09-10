@@ -12,7 +12,9 @@ from os import path, makedirs
 GEN_CAPTCHAS_FOLDER = "./captchas"
 
 # Captcha image size number (2 -> 640x360)
-CAPCTHA_SIZE_NUM = 2
+CAPCTHA_SIZE_NUM = 3
+
+NUMBER_OF_CAPTCHAS_TO_GENERATE = 5
 
 ####################################################################################################
 
@@ -26,22 +28,80 @@ def main():
     if not path.exists(GEN_CAPTCHAS_FOLDER):
         makedirs(GEN_CAPTCHAS_FOLDER)
     # Generate 20 captchas
-    for i in range(0, 20):
-        # Use one of the following 9 captcha generation options
-        #captcha = CaptchaGen.gen_captcha_image()
-        #captcha = CaptchaGen.gen_captcha_image(multicolor=False, margin=False)
-        #captcha = CaptchaGen.gen_captcha_image(multicolor=True, margin=False)
-        #captcha = CaptchaGen.gen_captcha_image(multicolor=True, margin=True)
-        captcha = CaptchaGen.gen_captcha_image(difficult_level=3)
-        #captcha = CaptchaGen.gen_captcha_image(difficult_level=4)
-        #captcha = CaptchaGen.gen_captcha_image(chars_mode="hex")
-        #captcha = CaptchaGen.gen_captcha_image(chars_mode="ascii")
-        #captcha = CaptchaGen.gen_captcha_image(difficult_level=5, multicolor=True, chars_mode="ascii")
-        image = captcha["image"]
-        characters = captcha["characters"]
-        print("Generated captcha {}: {}".format(str(i+1), characters))
-        image.save("{}/{}.png".format(GEN_CAPTCHAS_FOLDER, str(i+1)), "png")
+    for i in range(0, NUMBER_OF_CAPTCHAS_TO_GENERATE):
+        Chars_mode="nums"
+        Shapes=True
+        Noise=False
+        captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
+        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+
+        Chars_mode="nums"
+        Shapes=False
+        Noise=True
+        captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
+        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+
+        Chars_mode="nums"
+        Shapes=True
+        Noise=True
+        captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
+        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+
+        Chars_mode="letters"
+        Shapes=True
+        Noise=False
+        captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
+        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+
+        Chars_mode="letters"
+        Shapes=False
+        Noise=True
+        captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
+        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+
+        Chars_mode="letters"
+        Shapes=True
+        Noise=True
+        captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
+        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+
+        Chars_mode="numsletters"
+        Shapes=True
+        Noise=False
+        captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
+        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+
+        Chars_mode="numsletters"
+        Shapes=False
+        Noise=True
+        captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
+        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+
+        Chars_mode="numsletters"
+        Shapes=True
+        Noise=True
+        captcha = CaptchaGen.gen_captcha_image(chars_mode=Chars_mode, shapes=Shapes, noise=Noise)
+        saveCaptcha(captcha, Chars_mode, Shapes, Noise)
+
     print("Process completed. Check captchas images at \"{}\" folder.".format(GEN_CAPTCHAS_FOLDER))
+
+def getFolderName(chars_mode, shapes, noise):
+    name = "./captchas/" + chars_mode
+    if shapes:
+        name = name + "Shapes"
+    if noise:
+        name = name + "Noise"
+
+    return name
+
+def saveCaptcha(captcha, chars_mode, shapes, noise):
+    directory = getFolderName(chars_mode, shapes, noise)
+    image = captcha["image"]
+    characters = captcha["characters"]
+    print("Generated captcha {}: {}".format(directory, characters))
+    if not path.exists(directory):
+        makedirs(directory)
+    image.save("{}/{}.png".format(directory, characters), "png")
 
 
 if __name__ == '__main__':

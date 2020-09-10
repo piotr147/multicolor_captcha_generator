@@ -1,0 +1,9 @@
+1. 0-9
+2. A-Z
+3. 0-9 A-Z
+
+x
+
+1. Shapes
+2. Noise
+3. Rotation

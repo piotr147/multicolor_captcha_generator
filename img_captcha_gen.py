@@ -283,22 +283,22 @@ class CaptchaGenerator:
 
 ####################################################################################################
 
-    def gen_captcha_char_image(self, image_size, background_color=None, chars_mode="nums"):
+    def gen_captcha_char_image(self, image_size, background_color=None, chars_mode="nums", rotation=True, noise=False):
         '''Generate an one-char image captcha. Image with a random positioned-rotated character.'''
         # If not background color provided, generate a random one
         if not background_color:
             background_color = self.gen_rand_color()
         # If invalid chars mode provided, use numbers
         chars_mode = chars_mode.lower()
-        if (chars_mode != "nums") and (chars_mode != "hex") and (chars_mode != "ascii"):
+        if (chars_mode != "nums") and (chars_mode != "letters") and (chars_mode != "numsletters"):
             chars_mode = "nums"
         # Generate a random character
         if chars_mode == "nums":
             character = str(randint(0, 9))
-        elif chars_mode == "hex":
-            characters_availables = "ABCDEF0123456789"
+        elif chars_mode == "letters":
+            characters_availables = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             character = choice(characters_availables)
-        elif chars_mode == "ascii":
+        elif chars_mode == "numsletters":
             characters_availables = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
             character = choice(characters_availables)
         rand_color = self.gen_rand_custom_contrast_color(background_color)
@@ -312,34 +312,25 @@ class CaptchaGenerator:
         image = self.create_image_char(image_size, background_color["color"], character, \
                                     character_color, character_pos, character_font)
         # Random rotate the created image between -55º and +55º
-        image = image.rotate(randint(-55, 55), fillcolor=background_color["color"])
+        if rotation:
+            image = image.rotate(randint(-55, 55), fillcolor=background_color["color"])
         # Add some random lines to image
-        for _ in range(0, 2):
-            self.add_rand_line_to_image(image, 3, character_color)
+        # for _ in range(0, 2):
+        #     self.add_rand_line_to_image(image, 3, character_color)
         # Add noise pixels to the image
-        if ADD_NOISE:
+        if noise:
             self.add_rand_noise_to_image(image, 200)
         # Return the generated image
         generated_captcha = {"image": image, "character": character}
         return generated_captcha
 
 
-    def gen_captcha_image(self, difficult_level=2, chars_mode="nums", multicolor=False, \
-            margin=True):
+    def gen_captcha_image(self, chars_mode="nums", multicolor=False, margin=True, shapes=False, rotation=True, noise=False):
         '''Generate an image captcha.'''
-        # Limit difficult level argument if out of expected range
-        if difficult_level < 1:
-            print("INFO: Captcha generation for a lower difficult level than expected.")
-            print("      Using difficult level 1.")
-            print("")
-            difficult_level = 1
-        elif difficult_level > 5:
-            print("INFO: Captcha generation for a higher difficult level than expected.")
-            print("      Using difficult level 5.")
-            print("")
-            difficult_level = 5
-        # Set difficult level to array index values (1-5 to 0-4)
-        difficult_level = difficult_level - 1
+
+        NumberOfLines = 2
+        NumberOfCircles = 5
+
         # Generate a RGB background color if the multicolor is disabled
         if not multicolor:
             image_background = self.gen_rand_color()
@@ -354,7 +345,7 @@ class CaptchaGenerator:
             # Generate a random character, a random character color in contrast to background 
             # and a random position for it
             captcha = self.gen_captcha_char_image(self.one_char_image_size, image_background, \
-                    chars_mode)
+                    chars_mode, rotation, noise)
             image = captcha["image"]
             image_characters = image_characters + captcha["character"]
             # Add the generated image to the list
@@ -362,12 +353,13 @@ class CaptchaGenerator:
         # Join the 4 characters images into one
         image = self.images_join_horizontal(one_char_images)
         # Add one horizontal random line to full image
-        for _ in range(0, DIFFICULT_LEVELS_VALUES[difficult_level][0]):
-            self.add_rand_horizontal_line_to_image(image, randint(1, 5))
-        # Add some random circles to the image
-        for _ in range(0, DIFFICULT_LEVELS_VALUES[difficult_level][1]):
-            self.add_rand_circle_to_image(image, int(0.05*self.one_char_image_size[0]), \
-                                          int(0.15*self.one_char_image_size[1]))
+        if shapes:
+            for _ in range(0, NumberOfLines):
+                self.add_rand_horizontal_line_to_image(image, randint(1, 5))
+                self.add_rand_line_to_image(image, randint(1, 5))
+            for _ in range(0, NumberOfCircles):
+                self.add_rand_circle_to_image(image, int(0.05*self.one_char_image_size[0]), \
+                                            int(0.15*self.one_char_image_size[1]))
         # Add horizontal margins
         if margin:
             new_image = Image.new('RGBA', self.captcha_size, "rgb(0, 0, 0)")
