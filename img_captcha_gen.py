@@ -265,12 +265,28 @@ class CaptchaGenerator:
     def add_rand_noise_to_image(self, image, num_pixels):
         '''Add noise pixels to a PIL image.'''
         draw = ImageDraw.Draw(image)
-        for _ in range(0, num_pixels):
-            pixel_color = "rgb({}, {}, {})".format(str(randint(0, 255)), str(randint(0, 255)), \
-                                                   str(randint(0, 255)))
-            draw.point((randint(0, image.width), randint(0, image.height)), pixel_color)
+        randintRange = 20
+        # for _ in range(0, num_pixels):
+        #     pixel_color = "rgb({}, {}, {})".format(str(randint(0, 255)), str(randint(0, 255)), \
+        #                                            str(randint(0, 255)))
+        #     draw.point((randint(0, image.width), randint(0, image.height)), pixel_color)
+        for i in range(0, image.width):
+            for j in range(0, image.height):
+                pixel_color = image.getpixel((i,j))
+                red = pixel_color[0] + randint(-1 * randintRange, randintRange)
+                green = pixel_color[1] + randint(-1 * randintRange, randintRange)
+                blue = pixel_color[2] + randint(-1 * randintRange, randintRange)
+                if red < 0: red = 0
+                if red > 255: red = 255
+                if green < 0: green = 0
+                if green > 255: green = 255
+                if blue < 0: blue = 0
+                if blue > 255: blue = 255
+                new_pixel_color = "rgb({}, {}, {})".format(str(red), str(green), str(blue))
+                draw.point((i, j), new_pixel_color)
 
 
+                
     def images_join_horizontal(self, list_images):
         '''Horizontally join PIL images from list provided and create a single image from them.'''
         image = Image.new("RGB", (self.one_char_image_size[0]*len(list_images), \
