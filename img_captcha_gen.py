@@ -39,6 +39,7 @@ l_fonts = ["FreeMono.ttf", "FreeMonoBold.ttf", "FreeMonoOblique.ttf", "FreeSans.
 
 # Captcha with noise (turn it on add delay)
 ADD_NOISE = False
+NOISE_RANGE = 80
 
 # Captcha 16:9 resolution sizes (captcha_size_num -> 0 to 12)
 CAPTCHA_SIZE = [(256, 144), (426, 240), (640, 360), (768, 432), (800, 450), (848, 480), \
@@ -265,7 +266,6 @@ class CaptchaGenerator:
     def add_rand_noise_to_image(self, image, num_pixels):
         '''Add noise pixels to a PIL image.'''
         draw = ImageDraw.Draw(image)
-        randintRange = 20
         # for _ in range(0, num_pixels):
         #     pixel_color = "rgb({}, {}, {})".format(str(randint(0, 255)), str(randint(0, 255)), \
         #                                            str(randint(0, 255)))
@@ -273,9 +273,9 @@ class CaptchaGenerator:
         for i in range(0, image.width):
             for j in range(0, image.height):
                 pixel_color = image.getpixel((i,j))
-                red = pixel_color[0] + randint(-1 * randintRange, randintRange)
-                green = pixel_color[1] + randint(-1 * randintRange, randintRange)
-                blue = pixel_color[2] + randint(-1 * randintRange, randintRange)
+                red = pixel_color[0] + randint(-1 * NOISE_RANGE, NOISE_RANGE)
+                green = pixel_color[1] + randint(-1 * NOISE_RANGE, NOISE_RANGE)
+                blue = pixel_color[2] + randint(-1 * NOISE_RANGE, NOISE_RANGE)
                 if red < 0: red = 0
                 if red > 255: red = 255
                 if green < 0: green = 0
@@ -341,7 +341,7 @@ class CaptchaGenerator:
         return generated_captcha
 
 
-    def gen_captcha_image(self, chars_mode="nums", multicolor=False, margin=True, shapes=False, rotation=True, noise=False):
+    def gen_captcha_image(self, chars_mode="nums", multicolor=False, margin=False, shapes=False, rotation=True, noise=False):
         '''Generate an image captcha.'''
 
         NumberOfLines = 2
