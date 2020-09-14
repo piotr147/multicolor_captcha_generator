@@ -42,7 +42,7 @@ ADD_NOISE = False
 NOISE_RANGE = 80
 
 # Captcha 16:9 resolution sizes (captcha_size_num -> 0 to 12)
-CAPTCHA_SIZE = [(256, 144), (426, 240), (640, 360), (768, 432), (800, 450), (848, 480), \
+CAPTCHA_SIZE = [(320, 144), (426, 240), (640, 360), (768, 432), (800, 450), (848, 480), \
                 (960, 540), (1024, 576), (1152, 648), (1280, 720), (1366, 768), (1600, 900), \
                 (1920, 1080)]
 
@@ -72,7 +72,7 @@ class CaptchaGenerator:
         # Get captcha size
         self.captcha_size = CAPTCHA_SIZE[captcha_size_num]
         # Determine one char image height
-        fourth_size = self.captcha_size[0] / 4
+        fourth_size = self.captcha_size[0] / 5
         if fourth_size - int(fourth_size) <= 0.5:
             fourth_size = int(fourth_size)
         else:
@@ -354,7 +354,7 @@ class CaptchaGenerator:
         # background, a random font and font size, and random position-rotation
         one_char_images = []
         image_characters = ""
-        for _ in range(0, 4):
+        for _ in range(0, 5):
             # Generate a RGB background color for each iteration if multicolor enabled
             if multicolor:
                 image_background = self.gen_rand_color()
