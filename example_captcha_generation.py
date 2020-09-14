@@ -12,7 +12,7 @@ from os import path, makedirs
 GEN_CAPTCHAS_FOLDER = "./captchas"
 
 # Captcha image size number (2 -> 640x360)
-CAPCTHA_SIZE_NUM = 1
+CAPCTHA_SIZE_NUM = 0
 
 NUMBER_OF_CAPTCHAS_TO_GENERATE = 5
 
