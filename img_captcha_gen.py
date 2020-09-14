@@ -317,7 +317,8 @@ class CaptchaGenerator:
         elif chars_mode == "numsletters":
             characters_availables = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
             character = choice(characters_availables)
-        rand_color = self.gen_rand_custom_contrast_color(background_color)
+        # rand_color = self.gen_rand_custom_contrast_color(background_color)
+        rand_color = { "color" : "rgb(0, 0, 0)", "R" : 0, "G" : 0, "B" : 0 }
         character_color = rand_color["color"]
         character_pos = (int(image_size[0]/4), randint(0, int(image_size[0]/4)))
         # Pick a random font with a random size, from the provided list
@@ -349,7 +350,8 @@ class CaptchaGenerator:
 
         # Generate a RGB background color if the multicolor is disabled
         if not multicolor:
-            image_background = self.gen_rand_color()
+            # image_background = self.gen_rand_color()
+            image_background = { "color" : "rgb(255, 255, 255)", "R": 255, "G" : 255, "B": 255 }
         # Generate 4 one-character images with a random char color in contrast to the generated 
         # background, a random font and font size, and random position-rotation
         one_char_images = []
